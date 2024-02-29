@@ -9,8 +9,9 @@ import Billboards from './Billboards.jsx'
 
 export default function Experience()
 {
-    const blocksCount = useGame((state) => state.blocksCount)
-    const blocksSeed = useGame(state => state.blocksSeed)
+    
+    
+    const { segments, addSegment, totalLength } = useGame();
     
     
 
@@ -20,16 +21,18 @@ export default function Experience()
         <OrbitControls makeDefault />
         <Perf/>
 
-        <Physics debug={false}>
+        <Physics debug>
             <Lights />
-            {/* <Billboards position={[-4, 1, -6]}/>
-            <Billboards position={[-4, 1, -10]}/>
-            <Billboards position={[-4, 1, -16]}/>
-            <Billboards position={[-4, 1, -22]}/>
-            <Billboards position={[-4, 1, -28]}/>
-            <Billboards position={[-4, 1, -38]}/> */}
-            <Level count={ blocksCount } seed={ blocksSeed } />
+            {segments.map((segment, index) => (
+                    <Level 
+                        key={`level-${index}`}
+                        count={segment.blocksCount} 
+                        position={[0, 0, -(index * 30)]} // Adjust based on your specific setup
+                        onAddSegment={index === segments.length - 1 ? addSegment : undefined}
+                    />
+            ))}
             <Player />
+            
         </Physics>
 
     </>

@@ -4,8 +4,15 @@ import { subscribeWithSelector } from 'zustand/middleware'
 export default create(subscribeWithSelector((set) =>
 {
     return {
-        blocksCount: 4,
-        blocksSeed: 0,
+        segments: [{ blocksCount: 4 }], // Initialize with one segment
+        totalLength: 0, // Keep track of the total length/offset
+
+        addSegment: () =>
+            set((state) => ({
+                segments: [...state.segments, { blocksCount: 4 }],
+                totalLength: state.totalLength + 30, // Assuming each segment adds 30 units
+        })),
+       
         
         
 
@@ -37,7 +44,7 @@ export default create(subscribeWithSelector((set) =>
             set((state) =>
             {
                 if(state.phase === 'playing' || state.phase === 'ended')
-                    return { phase: 'ready', blocksSeed: Math.random() }
+                    return { phase: 'ready' }
 
                 return {}
             })
