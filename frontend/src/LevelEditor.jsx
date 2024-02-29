@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './LevelEditor.css'
 
 const obstacleOptions = [
     { label: "None", value: null },
@@ -8,13 +9,14 @@ const obstacleOptions = [
     { label: "Green Candle", value: "GreenCandle_1" },
 ];
 
-const LevelEditor = ({ onObstaclesSelected }) => {
+export default function LevelEditor  ({ onObstaclesSelected })  {
   const [selections, setSelections] = useState(Array(4).fill("None"));
 
   const handleChange = (index, value) => {
     const newSelections = [...selections];
     newSelections[index] = value;
     setSelections(newSelections);
+    
   };
 
   const handleSubmit = (e) => {
@@ -29,6 +31,7 @@ const LevelEditor = ({ onObstaclesSelected }) => {
           <select key={index} value={selections[index]} onChange={(e) => handleChange(index, e.target.value)}>
             {obstacleOptions.map(option => (
               <option key={option.value} value={option.value}>{option.label}</option>
+              
             ))}
           </select>
         ))}

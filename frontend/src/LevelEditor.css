@@ -1,0 +1,12 @@
+/* style.css */
+.level-editor {
+    position: fixed; /* or absolute */
+    top: 100px;
+    right: 100px;
+    z-index: 100; /* Ensure it's above the canvas */
+    background-color: white; /* Or any color that makes it visible on your page */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
