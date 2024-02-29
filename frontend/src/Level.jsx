@@ -5,6 +5,13 @@ import {useAnimations} from '@react-three/drei'
 import { useEffect, useMemo, useRef } from "react"
 import { useFrame } from '@react-three/fiber'
 
+const OBSTACLE_COMPONENTS = {
+    WhaleObstacle,
+    TextObstacle,
+    PoopObstacle,
+    GreenCandle_1,
+  };
+
 export function BlockStart({position=[0,0,0]}){
     return<group position={position} >
         {/* <mesh receiveShadow position={[0,-0.1,0]} >
@@ -16,7 +23,7 @@ export function BlockStart({position=[0,0,0]}){
 }
 
 export function WhaleObstacle({ position = [0, 0, 0] }) {
-    const originalWhale = useFBX('/sporkWhale_1.fbx');
+    const originalWhale = useFBX('/gold_coin_spork_1_raised.fbx');
     // Clone the object for a unique instance
     const whale = useMemo(() => originalWhale.clone(), [originalWhale]);
 
@@ -27,7 +34,7 @@ export function WhaleObstacle({ position = [0, 0, 0] }) {
                 <meshStandardMaterial color="greenyellow" />
             </mesh> */}
             <Float speed={3} rotationIntensity={1} floatIntensity={1} floatingRange={[0, 0.5]}>
-                <primitive object={whale} scale={0.005} position={[-1,0,0]} />
+                <primitive object={whale} scale={0.007} position={[-2.9,0,0]} />
             </Float>
         </group>
     );
@@ -36,7 +43,7 @@ export function WhaleObstacle({ position = [0, 0, 0] }) {
 
 
 export function TextObstacle({position=[0,0,0]}){
-    console.log('Rendering TextObstacle at position', position);
+
     const originalWagmi = useFBX('/wagmi_sml.fbx')
     const obref = useRef()
 
@@ -168,14 +175,14 @@ export function BlockEnd({position=[0,0,0], onClick}){
 
         {/*New segment road */}
 
-        <mesh position={[2,1,-1]} rotation-x={Math.PI/2}
+        {/* <mesh position={[2,1,-1]} rotation-x={Math.PI/2}
             onClick={() => console.log("hee")}
          >
            
             <boxGeometry args={[1.2,0.1,0.47]}  />
             <meshStandardMaterial color="green" />
-        </mesh>
-        <mesh position={[2,1,-1]} rotation-x={Math.PI/2}>
+        </mesh> */}
+        {/* <mesh position={[2,1,-1]} rotation-x={Math.PI/2}>
             <Text
                 font="/bebas-neue-v9-latin-regular.woff"
                 scale={ 0.19 }
@@ -188,7 +195,7 @@ export function BlockEnd({position=[0,0,0], onClick}){
                 Click to build the segment!
                 <meshBasicMaterial toneMapped={ false } />
             </Text>
-        </mesh>
+        </mesh> */}
 
     </group>
      
@@ -221,32 +228,27 @@ function Bounds({length=5}) {
 }
 
 
-export  function Level({count=4, types=[WhaleObstacle, TextObstacle, PoopObstacle, GreenCandle_1 ], onAddSegment, position}) {
+export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObstacle, GreenCandle_1], onAddSegment, position}) {
 
-    const blocks = useMemo(() => {
-        const blocks = []
-        const typesLength = types.length
-        for(let i=0; i<count; i++) {
-            const typeIndex = i % typesLength
-            const type = types[typeIndex]
-            blocks.push(type)
-        }
-        return blocks
-    }, [])
+    const renderedObstacles = useMemo(() => {
+        return obstacles.map((obstacleName, index) => {
+            const ObstacleComponent = OBSTACLE_COMPONENTS[obstacleName];
+            if (!ObstacleComponent) {
+                console.warn(`No component found for obstacle "${obstacleName}".`);
+                return null; // Skip rendering for unrecognized obstacle names
+            }
+            return <ObstacleComponent key={index} position={[0, 0, -(index + 1) * 5]} />;
+        });
+    }, [obstacles]);
     
-
-    // Calculate the Z position for BlockEnd, assuming each block takes up 5 units in Z
-    const blockEndZPosition = -((count +1) * 5);
 
     return (
         <group position={position}>
-            <BlockStart position={[0, 0, 0]} />
-            {blocks.map((Block, index) => (
-                <Block key={index} position={[0, 0, -(index + 1) * 5]} />
-            ))}
-            <BlockEnd position={[0, 0, blockEndZPosition]} onClick={onAddSegment}  />
-            <Bounds length={count + 1} />
-        </group>
+        <BlockStart position={[0, 0, 0]} />
+        {renderedObstacles}
+        <BlockEnd position={[0, 0, -((obstacles.length + 1) * 5)]} onClick={onAddSegment} />
+        <Bounds length={obstacles.length + 1} />
+    </group>
     );
 
 } 

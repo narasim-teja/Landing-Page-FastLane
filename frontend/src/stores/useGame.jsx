@@ -1,22 +1,25 @@
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 
+const defaultObstacles = ["WhaleObstacle", "TextObstacle", "PoopObstacle", "GreenCandle_1"];
+
+
 export default create(subscribeWithSelector((set) =>
 {
     return {
-        segments: [{ blocksCount: 4 }], // Initialize with one segment
-        totalLength: 0, // Keep track of the total length/offset
-
-        addSegment: () =>
+        segments: [{ obstacles: defaultObstacles.slice() }], // Clone the array to avoid reference issues
+        
+        editorOpen: false,
+      
+        addSegment: (obstaclesConfig) =>
             set((state) => ({
-                segments: [...state.segments, { blocksCount: 4 }],
-                totalLength: state.totalLength + 30, // Assuming each segment adds 30 units
-        })),
+                segments: [...state.segments, { obstacles: obstaclesConfig }],
+                editorOpen: false, // Close the editor after adding a segment
+            })),
+    
+        openEditor: () => set(() => ({ editorOpen: true })),
        
-        
-        
-
-        
+       
         /**
          * Time
          */
