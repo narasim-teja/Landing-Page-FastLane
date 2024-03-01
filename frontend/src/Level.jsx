@@ -11,6 +11,7 @@ const OBSTACLE_COMPONENTS = {
     TextObstacle,
     PoopObstacle,
     GreenCandle_1,
+    // CrystalObstacle_1,
   };
 
 export function BlockStart({position=[0,0,0]}){
@@ -177,6 +178,31 @@ export function GreenCandle_1({position=[0,0,0]}){
     </group>
      
 }
+
+// export function CrystalObstacle_1({ position = [0, 0, 0] }) {
+//     const originalCrystal = useFBX('/crystals_part1.fbx');
+    
+//     // Clone the object for a unique instance
+//     const crystal = useMemo(() => originalCrystal.clone(), [originalCrystal]);
+//     console.log(crystal)
+    
+//     return (
+//         <group position={position}>
+//             {/* <mesh receiveShadow position={[0, -0.1, 0]}>
+//                 <boxGeometry args={[5, 0.2, 5]} />
+//                 <meshStandardMaterial color="greenyellow" />
+//             </mesh> */}
+//             <RigidBody 
+//                 colliders="trimesh" 
+//                 restitution={0.2} 
+//                 friction={1}
+//             > 
+//                     <primitive object={crystal} scale={0.003} position={[0,0,0]} />   
+//             </RigidBody>
+            
+//         </group>
+//     );
+// }
 
 export function BlockEnd({position=[0,0,0]}){
     return<group position={position} >

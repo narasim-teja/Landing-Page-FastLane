@@ -74,7 +74,7 @@ export default function Player()
         const baseTorqueStrength = 0.2;
 
         // Define multipliers for boost and reduction
-        const boostMultiplier = 5; // Increase speed
+        const boostMultiplier = 3; // Increase speed
         const reductionMultiplier = 0.1; // Decrease speed
 
         // Calculate impulse and torque strengths
@@ -156,7 +156,7 @@ export default function Player()
 
     
     const ball = useFBX('/marble_high_poly.fbx');
-    const texture = useLoader(TextureLoader, '/Pallette_Texture_Atlas.png');
+    const texture = useLoader(TextureLoader, '/marbel-04.png');
     
     
     return <RigidBody
@@ -170,10 +170,10 @@ export default function Player()
         position={ [ 0, 1, 0 ] }
     >
         
-        {/* <primitive object={ball} scale={0.01} /> */}
+        {/* <primitive object={ball} scale={0.005} /> */}
         
         <mesh castShadow>
-            <icosahedronGeometry args={ [ 0.3, 1 ] } />
+            <sphereGeometry args={[0.25, 18, 18]} />
             <meshStandardMaterial  attach="material" map={texture} />
             
         </mesh>
