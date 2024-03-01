@@ -5,6 +5,7 @@ import {useAnimations} from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useFrame } from '@react-three/fiber'
 import useGame from './stores/useGame.jsx'
+import { Perf } from "r3f-perf";
 
 const OBSTACLE_COMPONENTS = {
     WhaleObstacle,
@@ -278,6 +279,17 @@ function Bounds({length=5, onClick}) {
 
     const corridor = useMemo(() => originalCorridor.clone(), [originalCorridor])
 
+    const { activatePause } = useGame();
+
+    const handleCheckpointEnter = () => {
+        activatePause()
+        
+         onClick()
+        
+        
+        
+    }
+
 
     return <>
         
@@ -290,7 +302,7 @@ function Bounds({length=5, onClick}) {
                 position={ [ 0, 0, - 5 * length ] }
                 restitution={ 0.2 }
                 friction={ 1 }
-                onCollisionEnter={onClick}
+                onCollisionEnter={handleCheckpointEnter}
             />
             
         </RigidBody>
@@ -301,6 +313,7 @@ function Bounds({length=5, onClick}) {
 
 export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObstacle, GreenCandle_1], onAddSegment, position, onCollisionExit}) {
 
+    
     const renderedObstacles = useMemo(() => {
         return obstacles.map((obstacleName, index) => {
             const ObstacleComponent = OBSTACLE_COMPONENTS[obstacleName];

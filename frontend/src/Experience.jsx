@@ -25,7 +25,7 @@ export default function Experience() {
             <OrbitControls makeDefault />
             <Perf />
 
-            <Physics debug>
+            <Physics debug={false}>
                 <Lights />
                 
                     {segments.map((segment, index) => (

@@ -20,6 +20,7 @@ export default function Player()
     const blocksCount = useGame((state) => state.blocksCount)
     const isSpeedBoostActive = useGame((state) => state.isSpeedBoostActive);
     const isSpeedReduced = useGame((state) => state.isSpeedReduced);
+    const isPaused = useGame((state) => state.isPaused);
 
     
     
@@ -63,6 +64,14 @@ export default function Player()
         /**
          * Controls
          */
+
+        if (isPaused) {
+            // Optionally reset linear and angular velocity to 0 to stop all movement immediately
+            body.current.setLinvel({ x: 0, y: 0, z: 0 });
+            body.current.setAngvel({ x: 0, y: 0, z: 0 });
+            return;
+        }
+        
         const { forward, backward, leftward, rightward } = getKeys()
 
         const impulse = { x: 0, y: 0, z: 0 }
@@ -76,6 +85,9 @@ export default function Player()
         // Define multipliers for boost and reduction
         const boostMultiplier = 3; // Increase speed
         const reductionMultiplier = 0.1; // Decrease speed
+        
+
+        
 
         // Calculate impulse and torque strengths
         let impulseStrength = baseImpulseStrength * delta;
@@ -88,6 +100,8 @@ export default function Player()
             impulseStrength *= reductionMultiplier;
             torqueStrength *= reductionMultiplier;
         }
+
+        
 
         if(forward)
         {

@@ -42,6 +42,18 @@ export default create(subscribeWithSelector((set) =>
                 set({ isSpeedReduced: false });
             }, 4000),
         })),
+
+        
+        isPaused: false,
+        // Action to pause the game
+        activatePause: () => set((state) => ({
+            isPaused: true,
+            // Reset speed after 1 seconds
+            speedPauseTimeout: setTimeout(() => {
+                set({ isPaused: false });
+            }, 1000),
+        })),
+       
        
        
         /**
