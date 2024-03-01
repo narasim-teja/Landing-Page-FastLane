@@ -10,9 +10,13 @@ import LevelEditor from './LevelEditor';
 import Billboards from './Billboards.jsx'
 
 export default function Experience() {
-    const { segments, editorOpen, addSegment, openEditor } = useGame();
+    const { segments, editorOpen, addSegment, openEditor, activateSpeedBoost } = useGame();
     
 
+    const handleCollisionExit = () => {
+        activateSpeedBoost();
+        console.log("gf")
+    };
     
 
     return (
@@ -21,14 +25,15 @@ export default function Experience() {
             <OrbitControls makeDefault />
             <Perf />
 
-            <Physics debug={false}>
+            <Physics debug>
                 <Lights />
                 
                     {segments.map((segment, index) => (
                         <Level key={`level-${index}`}
                                obstacles={segment.obstacles}
                                onAddSegment={index === segments.length - 1 ? openEditor : undefined}
-                               position={[0, 0, -(index * 30)]} />
+                               position={[0, 0, -(index * 30)]}
+                               onCollisionExit={handleCollisionExit} />
                     ))}
                 
                     

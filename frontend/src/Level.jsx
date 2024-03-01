@@ -2,8 +2,9 @@ import * as THREE from 'three'
 import { Float, Text, useFBX, useGLTF } from "@react-three/drei"
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import {useAnimations} from '@react-three/drei'
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useFrame } from '@react-three/fiber'
+import useGame from './stores/useGame.jsx'
 
 const OBSTACLE_COMPONENTS = {
     WhaleObstacle,
@@ -22,10 +23,27 @@ export function BlockStart({position=[0,0,0]}){
      
 }
 
+
 export function WhaleObstacle({ position = [0, 0, 0] }) {
     const originalWhale = useFBX('/gold_coin_spork_1_raised.fbx');
     // Clone the object for a unique instance
     const whale = useMemo(() => originalWhale.clone(), [originalWhale]);
+    const { activateSpeedBoost } = useGame();
+
+    const [isGameReady, setGameReady] = useState(false);
+
+    useEffect(() => {
+        // Example condition to set the game as ready, could be based on player movement or a timer
+        const timer = setTimeout(() => setGameReady(true), 1000); // Wait for 1 second after load
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleCollisionExit = () => {
+        if (isGameReady) {
+            console.log("activating speed activation.");
+            activateSpeedBoost();
+        }
+    };
 
     return (
         <group position={position}>
@@ -33,9 +51,17 @@ export function WhaleObstacle({ position = [0, 0, 0] }) {
                 <boxGeometry args={[5, 0.2, 5]} />
                 <meshStandardMaterial color="greenyellow" />
             </mesh> */}
-            <Float speed={3} rotationIntensity={1} floatIntensity={1} floatingRange={[0, 0.5]}>
-                <primitive object={whale} scale={0.007} position={[-2.9,0,0]} />
-            </Float>
+            <RigidBody 
+                colliders="hull" 
+                restitution={0.2} 
+                friction={1}
+                onCollisionExit={handleCollisionExit}
+                
+
+            > 
+                    <primitive object={whale} scale={0.007} position={[-2.9,0,0]} />   
+            </RigidBody>
+            
         </group>
     );
 }
@@ -81,7 +107,22 @@ export function PoopObstacle({position=[0,0,0]}){
 
     const poop = useMemo(() => originalPoop.clone(), [originalPoop])
 
-    
+    const { activateSpeedReduction } = useGame();
+
+    const [isGameReady, setGameReady] = useState(false);
+
+    useEffect(() => {
+        // Example condition to set the game as ready, could be based on player movement or a timer
+        const timer = setTimeout(() => setGameReady(true), 1000); // Wait for 1 second after load
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleCollisionExit = () => {
+        if (isGameReady) {
+            console.log("activating speed reduction.");
+            activateSpeedReduction();
+        }
+    };
   
     return<group position={position} >
         {/* <mesh receiveShadow position={[0,-0.1,0]} >
@@ -89,13 +130,16 @@ export function PoopObstacle({position=[0,0,0]}){
             <meshStandardMaterial color="greenyellow" />
         </mesh> */}
 
-        <RigidBody colliders="hull" restitution={0.2} friction={1} >
+        <RigidBody 
+            colliders="hull" 
+            restitution={0.2} 
+            friction={1} 
+            onCollisionExit={handleCollisionExit}  
+        >
             <primitive object={poop} scale={0.007} position={[1,0.8,1.6]} rotation-x={-Math.PI/2} />
         </RigidBody>
         
-       
-        
-        
+     
     </group>
      
 }
@@ -134,7 +178,7 @@ export function GreenCandle_1({position=[0,0,0]}){
      
 }
 
-export function BlockEnd({position=[0,0,0], onClick}){
+export function BlockEnd({position=[0,0,0]}){
     return<group position={position} >
         <Text
             font="/bebas-neue-v9-latin-regular.woff"
@@ -145,14 +189,14 @@ export function BlockEnd({position=[0,0,0], onClick}){
             <meshBasicMaterial toneMapped={ false } />
         </Text>
         <mesh receiveShadow position={[0,0,0]} >
-            <boxGeometry args={[5,0.2,5]} />
+            <boxGeometry args={[5,0.1,5]} />
             <meshStandardMaterial color="limegreen" />
         </mesh>
 
         {/*Contuie button*/}
 
-        <mesh position={[2,2,-1]} rotation-x={Math.PI/2}
-            onClick={onClick}
+        {/* <mesh position={[2,2,-1]} rotation-x={Math.PI/2}
+            
          >
            
             <boxGeometry args={[1.2,0.1,0.47]}  />
@@ -171,7 +215,7 @@ export function BlockEnd({position=[0,0,0], onClick}){
                 Click to Continue to the next segment!
                 <meshBasicMaterial toneMapped={ false } />
             </Text>
-        </mesh>
+        </mesh> */}
 
         {/*New segment road */}
 
@@ -201,7 +245,7 @@ export function BlockEnd({position=[0,0,0], onClick}){
      
 }
 
-function Bounds({length=5}) {
+function Bounds({length=5, onClick}) {
 
     
     const originalCorridor = useFBX('/cooridor.fbx');
@@ -216,10 +260,11 @@ function Bounds({length=5}) {
         <primitive object={corridor} scale={[0.014,0.01, (0.00668 * length)]} position={[0,-0.21,-(2 * length)]}  />
         <CuboidCollider
                 type="fixed"
-                args={ [ 2.5, 0.1, 2.5 ] }
+                args={ [ 2.5, 0, 2.5 ] }
                 position={ [ 0, 0, - 5 * length ] }
                 restitution={ 0.2 }
                 friction={ 1 }
+                onCollisionEnter={onClick}
             />
             
         </RigidBody>
@@ -228,7 +273,7 @@ function Bounds({length=5}) {
 }
 
 
-export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObstacle, GreenCandle_1], onAddSegment, position}) {
+export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObstacle, GreenCandle_1], onAddSegment, position, onCollisionExit}) {
 
     const renderedObstacles = useMemo(() => {
         return obstacles.map((obstacleName, index) => {
@@ -237,7 +282,7 @@ export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObs
                 console.warn(`No component found for obstacle "${obstacleName}".`);
                 return null; // Skip rendering for unrecognized obstacle names
             }
-            return <ObstacleComponent key={index} position={[0, 0, -(index + 1) * 5]} />;
+            return <ObstacleComponent key={index} position={[0, 0, -(index + 1) * 5]}  />;
         });
     }, [obstacles]);
     
@@ -246,8 +291,8 @@ export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObs
         <group position={position}>
         <BlockStart position={[0, 0, 0]} />
         {renderedObstacles}
-        <BlockEnd position={[0, 0, -((obstacles.length + 1) * 5)]} onClick={onAddSegment} />
-        <Bounds length={obstacles.length + 1} />
+        <BlockEnd position={[0, 0, -((obstacles.length + 1) * 5)]}  />
+        <Bounds length={obstacles.length + 1} onClick={onAddSegment} />
     </group>
     );
 

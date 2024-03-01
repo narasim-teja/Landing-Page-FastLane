@@ -18,6 +18,8 @@ export default function Player()
     const end = useGame((state) => state.end)
     const restart = useGame((state) => state.restart)
     const blocksCount = useGame((state) => state.blocksCount)
+    const isSpeedBoostActive = useGame((state) => state.isSpeedBoostActive);
+    const isSpeedReduced = useGame((state) => state.isSpeedReduced);
 
     
     
@@ -65,9 +67,27 @@ export default function Player()
 
         const impulse = { x: 0, y: 0, z: 0 }
         const torque = { x: 0, y: 0, z: 0 }
+        
+        
+        // Define base impulse and torque strengths
+        const baseImpulseStrength = 0.6;
+        const baseTorqueStrength = 0.2;
 
-        const impulseStrength = 0.6 * delta
-        const torqueStrength = 0.2 * delta
+        // Define multipliers for boost and reduction
+        const boostMultiplier = 5; // Increase speed
+        const reductionMultiplier = 0.1; // Decrease speed
+
+        // Calculate impulse and torque strengths
+        let impulseStrength = baseImpulseStrength * delta;
+        let torqueStrength = baseTorqueStrength * delta;
+
+        if (isSpeedBoostActive && !isSpeedReduced) {
+            impulseStrength *= boostMultiplier;
+            torqueStrength *= boostMultiplier;
+        } else if (isSpeedReduced && !isSpeedBoostActive) {
+            impulseStrength *= reductionMultiplier;
+            torqueStrength *= reductionMultiplier;
+        }
 
         if(forward)
         {
@@ -135,7 +155,7 @@ export default function Player()
     })
 
     
-    const ball = useFBX('/ball.fbx');
+    const ball = useFBX('/marble_high_poly.fbx');
     const texture = useLoader(TextureLoader, '/Pallette_Texture_Atlas.png');
     
     

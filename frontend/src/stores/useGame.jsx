@@ -18,6 +18,30 @@ export default create(subscribeWithSelector((set) =>
             })),
     
         openEditor: () => set(() => ({ editorOpen: true })),
+
+        isSpeedBoostActive: false,
+        activateSpeedBoost: () => set(() => ({
+            isSpeedBoostActive: true,
+            // Reset after 3 seconds
+            speedBoostTimeout: setTimeout(() => {
+                set({ isSpeedBoostActive: false });
+            }, 3000),
+        })),
+        // deactivateSpeedBoost: () => set((state) => {
+        //     clearTimeout(state.speedBoostTimeout);
+        //     return { isSpeedBoostActive: false };
+        // }),
+
+        isSpeedReduced: false,
+  
+        // Action to activate speed reduction
+        activateSpeedReduction: () => set((state) => ({
+            isSpeedReduced: true,
+            // Reset speed after 3 seconds
+            speedReductionTimeout: setTimeout(() => {
+                set({ isSpeedReduced: false });
+            }, 4000),
+        })),
        
        
         /**
