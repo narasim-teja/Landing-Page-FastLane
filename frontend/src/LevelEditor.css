@@ -1,12 +1,65 @@
-/* style.css */
 .level-editor {
-    position: fixed; /* or absolute */
-    top: 100px;
-    right: 100px;
-    z-index: 100; /* Ensure it's above the canvas */
-    background-color: white; /* Or any color that makes it visible on your page */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  
+  position: fixed;
+  top: 100px;
+  right: 200px;
+  z-index: 1000;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  max-height: 70vh; 
+  overflow-x: hidden;
+  width: 1000px;
+}
+
+.obstacle-selection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.obstacle-option {
+  margin: 10px;
+  cursor: pointer;
+}
+
+.obstacle-image {
+  display: block;
+  width: 100px; /* Adjust size as needed */
+  height: 100px; /* Adjust size as needed */
+  border: 2px solid transparent; /* Highlight selected option */
+}
+
+input[type="radio"]:checked + .obstacle-image {
+  border-color: #4CAF50; /* Highlight color */
+}
+
+.create-segment-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.editor-instruction {
+  margin-bottom: 20px; /* Adjust spacing as needed */
+  text-align: center;
+  font-size: 18px; /* Adjust size as needed */
+  color: #333; /* Adjust color as needed */
+}
+
+.obstacle-label {
+  font-weight: bold;
+  margin-right: 10px; /* Adjust based on layout */
+  display: inline-block; /* Or 'block' if you prefer the label above the options */
+  vertical-align: top; /* Aligns text with the top of the radio buttons */
+}
