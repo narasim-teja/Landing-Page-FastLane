@@ -1,25 +1,34 @@
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 
-const defaultObstacles = ["WhaleObstacle", "TextObstacle", "PoopObstacle", "GreenCandle_1"];
+import { io } from 'socket.io-client';
 
+// // Connect to the WebSocket server
+// const socket = io.connect("ws://10.31.1.210:3001");
 
-export default create(subscribeWithSelector((set) =>
-{
-    return {
-        segments: [{ obstacles: defaultObstacles.slice() }], // Clone the array to avoid reference issues
-        
+const initialObstaclesData = [0, 0, 0, 0, 0,0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0,0, 0, 4, 0, 0,
+    ];
+
+const useGame = create(subscribeWithSelector((set, get) => ({
+    segments: [{ obstacles: initialObstaclesData.slice() }],
+    editorOpen: false,
+
+    // Action to append a new row of obstacles to the current segment
+    appendObstaclesRow: (obstaclesInRow) => set((state) => {
+        // Assuming we're always updating the first (and currently only) segment
+        const updatedObstacles = [...state.segments[0].obstacles, ...obstaclesInRow];
+        const updatedSegments = [{ obstacles: updatedObstacles }];
+        return { segments: updatedSegments };
+    }),
+
+    addSegment: (newObstaclesArray) => set((state) => ({
+        segments: [...state.segments, { obstacles: newObstaclesArray }],
         editorOpen: false,
-      
-        addSegment: (obstaclesConfig) =>
-            set((state) => ({
-                segments: [...state.segments, { obstacles: obstaclesConfig }],
-                editorOpen: false, // Close the editor after adding a segment
-            })),
-    
-        openEditor: () => set(() => ({ editorOpen: true })),
+    })),
 
-        isSpeedBoostActive: false,
+    openEditor: () => set(() => ({ editorOpen: true })),
+
+    isSpeedBoostActive: false,
         activateSpeedBoost: () => set(() => ({
             isSpeedBoostActive: true,
             // Reset after 3 seconds
@@ -101,6 +110,19 @@ export default create(subscribeWithSelector((set) =>
             })
         },
 
-        
-    }
-}))
+
+})));
+
+// // WebSocket event listeners
+// socket.on("connect", () => {
+//     console.log("WebSocket connected");
+//     // Example emit, adjust according to your actual initial data fetch needs
+//     socket.emit("server.revealRow", 1337, 1);
+// });
+
+// socket.on("client.revealRow", (rowId, obstaclesInRow) => {
+//     console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
+//     useGame.getState().appendObstaclesRow(obstaclesInRow);
+// });
+
+export default useGame;

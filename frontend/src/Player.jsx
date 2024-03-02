@@ -26,7 +26,7 @@ export default function Player()
     
     const reset = () =>
     {
-        body.current.setTranslation({ x: 0, y: 1, z: 0 })
+        body.current.setTranslation({ x: 2, y: 1, z: -2 })
         body.current.setLinvel({ x: 0, y: 0, z: 0 })
         body.current.setAngvel({ x: 0, y: 0, z: 0 })
     }
@@ -181,7 +181,7 @@ export default function Player()
         friction={ 1 } 
         linearDamping={ 0.5 }
         angularDamping={ 0.5 }
-        position={ [ 0, 1, 0 ] }
+        position={ [ 2, 1, -2 ] }
     >
         
         {/* <primitive object={ball} scale={0.005} /> */}

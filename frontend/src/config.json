@@ -1,0 +1,47 @@
+{
+  "31337": {
+    "fastlane": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    },
+    "obstacles": {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    },
+    "exploreURL": "#"
+  },
+  "80001": {
+    "fastlane": {
+      "address": "0x3Ef0DFa268ec6c33091FD6050A289c4dE0d30478"
+    },
+    "obstacles": {
+      "address": "0xBa34aFab8cDB0ce1be77C9851E26a0F04fc2F211"
+    },
+    "exploreURL": "https://mumbai.polygonscan.com/"
+  },
+  "59140": {
+    "fastlane": {
+      "address": "0x0099cfe02A24ccAad379816C75117f7394c38Cd5"
+    },
+    "obstacles": {
+      "address": "0x2aF721CE272dB81e22aA697b75FBe72E2A1779F0"
+    },
+    "exploreURL": "https://goerli.lineascan.build"
+  },
+  "23294": {
+    "fastlane": {
+      "address": "0x56abffbcd036b9fa55cc4b4f15d712f2d0e5f782"
+    },
+    "obstacles": {
+      "address": "0x411d2a5a05251539467c440401a7b0a1190825aa"
+    },
+    "exploreURL": "https://testnet.explorer.sapphire.oasis.dev"
+  },
+  "421614": {
+    "fastlane": {
+      "address": "0xc3478fC02D7FB0F597AbC51B08cD5e1E0f79f982"
+    },
+    "obstacles": {
+      "address": "0x31A27B2AFbAFbeB61e2c62259D264E19414b2f69"
+    },
+    "exploreURL": "https://sepolia-explorer.arbitrum.io"
+  }
+}

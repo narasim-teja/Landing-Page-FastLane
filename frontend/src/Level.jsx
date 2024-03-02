@@ -6,21 +6,27 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useFrame } from '@react-three/fiber'
 import useGame from './stores/useGame.jsx'
 import { Perf } from "r3f-perf";
+import { useObstacleComponentById } from './useObstacleComponentById';
 
-const OBSTACLE_COMPONENTS = {
-    WhaleObstacle,
-    TextObstacle,
-    PoopObstacle,
-    GreenCandle_1,
-    // CrystalObstacle_1,
-  };
+// const OBSTACLE_COMPONENT_MAP = {
+//    "1": WhaleObstacle,
+//    "2": TextObstacle,
+//    "3": PoopObstacle,
+//    "4": GreenCandle_1,
+//     // CrystalObstacle_1,
+//   };
+
+
+  
 
 export function BlockStart({position=[0,0,0]}){
+    
     return<group position={position} >
         {/* <mesh receiveShadow position={[0,-0.1,0]} >
             <boxGeometry args={[5,0.2,5]} />
             <meshStandardMaterial color="limegreen" />
         </mesh> */}
+        
     </group>
      
 }
@@ -64,6 +70,7 @@ export function WhaleObstacle({ position = [0, 0, 0] }) {
                     <primitive object={whale} scale={0.007} position={[-2.9,0,0]} />   
             </RigidBody>
             
+            
         </group>
     );
 }
@@ -101,6 +108,62 @@ export function TextObstacle({position=[0,0,0]}){
     </group>
      
 }
+
+// export function SpawnObs({col,row,obstacleId}){
+       
+//         const position = useMemo(() => [col , 0.5, -row * 5], [col, row]);
+        
+//         const originalPoop = useFBX('/poop_final.fbx')
+        
+    
+//         const poop = useMemo(() => originalPoop.clone(), [originalPoop])
+    
+//         const { activateSpeedReduction } = useGame();
+    
+//         const [isGameReady, setGameReady] = useState(false);
+    
+//         useEffect(() => {
+//             // Example condition to set the game as ready, could be based on player movement or a timer
+//             const timer = setTimeout(() => setGameReady(true), 1000); // Wait for 1 second after load
+//             return () => clearTimeout(timer);
+//         }, []);
+    
+//         const handleCollisionExit = () => {
+//             if (isGameReady) {
+//                 console.log("activating speed reduction.");
+//                 activateSpeedReduction();
+//             }
+//         };
+      
+//         return<group position={position} >
+//             {/* <mesh receiveShadow position={[0,-0.1,0]} >
+//                 <boxGeometry args={[5,0.2,5]} />
+//                 <meshStandardMaterial color="greenyellow" />
+//             </mesh> */}
+    
+//             <RigidBody 
+//                 colliders="hull" 
+//                 restitution={0.2} 
+//                 friction={1} 
+//                 onCollisionExit={handleCollisionExit}  
+//             >
+//                 <primitive object={poop} scale={0.004} position={[0,0,0]} rotation-x={-Math.PI/2} />
+//             </RigidBody>
+            
+         
+//      </group>
+         
+// }
+
+export function ObstacleSpawner  ({ row, col, obstacleId })  {
+    const ObstacleComponent = useObstacleComponentById(obstacleId);
+    if (!ObstacleComponent) return null;
+
+    const position = [col , 0, -row * 5]; // Adjust based on your coordinate system
+    return <ObstacleComponent position={position} />;
+};
+
+
 
 export function PoopObstacle({position=[0,0,0]}){
     // const { scene, animations } = useGLTF('/poop_final.gltf'); // Assuming the file is now a GLTF
@@ -210,12 +273,12 @@ export function BlockEnd({position=[0,0,0]}){
         <Text
             font="/bebas-neue-v9-latin-regular.woff"
             scale={ 1 }
-            position={ [ -1, 1.25, 2 ] }
+            position={ [ 0, 1.25, -1 ] }
         >
             Checkpoint
             <meshBasicMaterial toneMapped={ false } />
         </Text>
-        <mesh receiveShadow position={[0,0,0]} >
+        <mesh receiveShadow position={[2,0,-3]} >
             <boxGeometry args={[5,0.1,5]} />
             <meshStandardMaterial color="limegreen" />
         </mesh>
@@ -295,12 +358,12 @@ function Bounds({length=5, onClick}) {
         
         <RigidBody type="fixed" colliders="trimesh" restitution={ 0.2 } friction={ 1 }  >
             
-        <primitive object={corridor} scale={[0.014,0.01, (0.00668 * length)]} position={[0,-0.21,-(2 * length)]}  />
+        <primitive object={corridor} scale={[0.014,0.01, (0.00668 * length)]} position={[2,-0.21,-(2 * length) -3]}  />
         <CuboidCollider
                 type="fixed"
                 args={ [ 2.5, 0, 2.5 ] }
-                position={ [ 0, 0, - 5 * length ] }
-                restitution={ 0.2 }
+                position={ [ 2, 0, - (5 * length) -3 ] }
+                restitution={ 0.2}
                 friction={ 1 }
                 onCollisionEnter={handleCheckpointEnter}
             />
@@ -311,28 +374,27 @@ function Bounds({length=5, onClick}) {
 }
 
 
-export  function Level({count=4, obstacles=[WhaleObstacle, TextObstacle, PoopObstacle, GreenCandle_1], onAddSegment, position, onCollisionExit}) {
 
-    
-    const renderedObstacles = useMemo(() => {
-        return obstacles.map((obstacleName, index) => {
-            const ObstacleComponent = OBSTACLE_COMPONENTS[obstacleName];
-            if (!ObstacleComponent) {
-                console.warn(`No component found for obstacle "${obstacleName}".`);
-                return null; // Skip rendering for unrecognized obstacle names
-            }
-            return <ObstacleComponent key={index} position={[0, 0, -(index + 1) * 5]}  />;
-        });
-    }, [obstacles]);
-    
 
-    return (
+export  function Level({obstaclesArray, onAddSegment, position }) {
+    const obstacles = obstaclesArray.obstacles || [];
+    console.log(obstacles)
+
+    return(
         <group position={position}>
-        <BlockStart position={[0, 0, 0]} />
-        {renderedObstacles}
-        <BlockEnd position={[0, 0, -((obstacles.length + 1) * 5)]}  />
-        <Bounds length={obstacles.length + 1} onClick={onAddSegment} />
-    </group>
-    );
+        
+            {obstacles.map((obstacleId, index) => {
+                if (obstacleId === 0) return null; // Skip if no obstacle
+                const row = Math.floor(index / 5);
+                const col = index % 5;
+                return <ObstacleSpawner key={index} row={row} col={col} obstacleId={obstacleId.toString()} />;
+            })}
+          <BlockStart position={[0, 0, 0]} />
+          <BlockEnd position={[0, 0, -((4 + 1) * 5)]}  />
+          <Bounds length={4 + 1} onClick={onAddSegment} />
+          
+        </group>
+      );
+    
 
 } 

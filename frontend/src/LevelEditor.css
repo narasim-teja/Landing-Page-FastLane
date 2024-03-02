@@ -1,7 +1,7 @@
 .level-editor {
   position: fixed;
-  top: 100px;
-  right: 200px;
+  top: 100px; /* Adjusted for better visibility */
+  left: 400px; /* Moved to the left side */
   z-index: 1000;
   background-color: white;
   padding: 20px;
@@ -11,32 +11,58 @@
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
-  max-height: 70vh; 
-  overflow-x: hidden;
-  width: 1000px;
+  max-height: 80vh; /* Adjusted to fit more content */
+  width: auto;
+  
 }
 
 .obstacle-selection {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .obstacle-option {
-  margin: 10px;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: start; /* Align items to the start */
+  flex-grow: 1;
+}
+
+.obstacle-image-container {
+  flex-basis: 20%; /* Allocate space for images */
+  text-align: center; /* Center images */
 }
 
 .obstacle-image {
-  display: block;
-  width: 100px; /* Adjust size as needed */
-  height: 100px; /* Adjust size as needed */
-  border: 2px solid transparent; /* Highlight selected option */
+  width: 80px; /* Adjust size */
+  height: 80px; /* Adjust size */
+  margin: 5px; /* Add some space around */
+  border: 2px solid transparent;
 }
 
 input[type="radio"]:checked + .obstacle-image {
-  border-color: #4CAF50; /* Highlight color */
+  border-color: #4CAF50;
+}
+
+.obstacle-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align text and checkboxes to the start */
+  padding-left: 20px; /* Add some space between image and details */
+}
+
+.column-selection {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.column-selection span {
+  margin-right: 10px;
+  font-weight: bold;
 }
 
 .create-segment-button {
@@ -47,19 +73,16 @@ input[type="radio"]:checked + .obstacle-image {
   color: white;
   border: none;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
-.editor-instruction {
-  margin-bottom: 20px; /* Adjust spacing as needed */
-  text-align: center;
-  font-size: 18px; /* Adjust size as needed */
-  color: #333; /* Adjust color as needed */
-}
-
-.obstacle-label {
+.editor-instruction, .obstacle-label {
   font-weight: bold;
-  margin-right: 10px; /* Adjust based on layout */
-  display: inline-block; /* Or 'block' if you prefer the label above the options */
-  vertical-align: top; /* Aligns text with the top of the radio buttons */
+  margin-bottom: 10px;
+  text-align: left; /* Ensure text is aligned to the left */
+}
+
+/* Additional styles for checkboxes */
+input[type="checkbox"] {
+  margin-right: 5px;
 }

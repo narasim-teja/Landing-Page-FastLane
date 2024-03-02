@@ -8,17 +8,30 @@
     "build": "vite build"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "2.0.2",
+    "@nomiclabs/hardhat-ethers": "2.2.3",
     "@vitejs/plugin-react": "4.1",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.20.1",
     "vite": "^4.5.0"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.4.0",
     "@react-three/drei": "^9.88.7",
     "@react-three/fiber": "^8.15.8",
     "@react-three/postprocessing": "^2.15.8",
     "@react-three/rapier": "^1.1.2",
+    "dotenv": "^16.0.0",
     "r3f-perf": "^7.1.2",
     "react": "18.2",
     "react-dom": "18.2",
+    "react-redux": "^9.1.0",
+    "react-router-dom": "^6.22.2",
+    "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
+    "socket.io": "^4.7.4",
+    "socket.io-client": "^4.7.4",
     "three": "^0.158.0",
     "zustand": "4.4"
   }
