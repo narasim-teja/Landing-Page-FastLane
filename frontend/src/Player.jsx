@@ -6,10 +6,13 @@ import * as THREE from 'three'
 import useGame from './stores/useGame.jsx'
 import { useFBX } from '@react-three/drei';
 import { TextureLoader } from 'three';
+import { revealRow } from './stores/useGame.jsx'
+
+
 
 export default function Player()
 {
-    const body = useRef()
+    
     const [ subscribeKeys, getKeys ] = useKeyboardControls()
     const { rapier, world } = useRapier()
     const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(10, 10, 10))
@@ -21,6 +24,15 @@ export default function Player()
     const isSpeedBoostActive = useGame((state) => state.isSpeedBoostActive);
     const isSpeedReduced = useGame((state) => state.isSpeedReduced);
     const isPaused = useGame((state) => state.isPaused);
+
+    const body = useRef();
+    // Other player setup...
+
+    const sessionId = 11;
+    // Unique session ID for each game instance
+    const lastRow = useRef(0);
+
+    
 
     
     
@@ -158,6 +170,17 @@ export default function Player()
         * Phases
         */
        
+        const zPosition = body.current.translation().z;
+
+        const currentRow = Math.floor(-zPosition/4);
+        // console.log(currentRow) // Assuming each unit in Z represents a row
+
+        // Check if the player has moved to a new row
+        if (currentRow > lastRow.current) {
+            lastRow.current = currentRow; // Update the last row
+            // Emit event to server to reveal the next row of obstacles
+            revealRow(sessionId, currentRow);
+        }
     
         
 

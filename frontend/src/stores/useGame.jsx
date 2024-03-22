@@ -3,15 +3,31 @@ import { subscribeWithSelector } from 'zustand/middleware'
 
 import { io } from 'socket.io-client';
 
-// // Connect to the WebSocket server
-// const socket = io.connect("ws://10.31.1.210:3001");
+// Connect to the WebSocket server
+const socket = io.connect("http://localhost:3000");
 
-const initialObstaclesData = [0, 0, 0, 0, 0,0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0,0, 0, 4, 0, 0,
+console.log(socket)
+
+  
+
+
+
+const initialObstaclesData = [
     ];
 
+    export function revealRow(sessionId,currentRow){
+       
+        socket.emit("server.revealRow", 23295,sessionId, currentRow);
+        console.log("currentRow: " + currentRow)
+        console.log("sessionId:current " + sessionId)
+
+    }
+
 const useGame = create(subscribeWithSelector((set, get) => ({
-    segments: [{ obstacles: initialObstaclesData.slice() }],
+    segments: [{ obstacles: initialObstaclesData.slice(0,4) }],
     editorOpen: false,
+
+    
 
     // Action to append a new row of obstacles to the current segment
     appendObstaclesRow: (obstaclesInRow) => set((state) => {
@@ -21,10 +37,18 @@ const useGame = create(subscribeWithSelector((set, get) => ({
         return { segments: updatedSegments };
     }),
 
-    addSegment: (newObstaclesArray) => set((state) => ({
-        segments: [...state.segments, { obstacles: newObstaclesArray }],
-        editorOpen: false,
-    })),
+    addSegment: (newObstaclesArray) => {
+        // First, update the state
+        set((state) => ({
+            segments: [...state.segments, { obstacles: newObstaclesArray }],
+            editorOpen: false,
+        }));
+
+        // Then, use the get function to access the updated state and emit the socket event
+        const { segments } = get();
+        const currentSegment = segments[segments.length - 1]; // Get the latest segment
+        socket.emit("server.addSegment",59140, currentSegment.obstacles);
+    },
 
     openEditor: () => set(() => ({ editorOpen: true })),
 
@@ -113,16 +137,23 @@ const useGame = create(subscribeWithSelector((set, get) => ({
 
 })));
 
-// // WebSocket event listeners
-// socket.on("connect", () => {
-//     console.log("WebSocket connected");
-//     // Example emit, adjust according to your actual initial data fetch needs
-//     socket.emit("server.revealRow", 1337, 1);
-// });
+// WebSocket event listeners
+socket.on("connect", () => {
+    console.log("WebSocket connected");
+    // Example emit, adjust according to your actual initial data fetch needs
 
-// socket.on("client.revealRow", (rowId, obstaclesInRow) => {
-//     console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
-//     useGame.getState().appendObstaclesRow(obstaclesInRow);
-// });
+});
+
+
+socket.on("client.revealRow", (rowId, obstaclesInRow) => {
+    console.log(`Raw event data for row ${rowId}:`, obstaclesInRow);
+    if (obstaclesInRow) {
+        console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
+        useGame.getState().appendObstaclesRow(obstaclesInRow);
+    } else {
+        console.error(`No obstacles data received for row ${rowId} ,Data: ${JSON.stringify(obstaclesInRow)}.`);
+        // Handle the case where no data is received (e.g., request data again or use fallback data)
+    }
+});
 
 export default useGame;

@@ -47,7 +47,7 @@ export default function LevelEditor({ onObstaclesSelected }) {
         resultArray[sel.column + (index * numberOfColumns)] = parseInt(sel.obstacle);
       }
     });
-    await mint()
+    // await mint()
     onObstaclesSelected(resultArray);
     
    

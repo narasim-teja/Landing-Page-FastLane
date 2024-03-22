@@ -378,7 +378,7 @@ function Bounds({length=5, onClick}) {
 
 export  function Level({obstaclesArray, onAddSegment, position }) {
     const obstacles = obstaclesArray.obstacles || [];
-    console.log(obstacles)
+    // console.log(obstacles)
 
     return(
         <group position={position}>

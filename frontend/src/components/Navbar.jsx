@@ -7,6 +7,7 @@ import arbitrum from '../assets/arbitrum2.png'
 import {ethers} from 'ethers'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
+import useGame from '../stores/useGame'
 
 
 const Navbar = () => {
@@ -20,6 +21,7 @@ const Navbar = () => {
     const userBalance = useSelector(state => state.fastlane.userBalance)
 	let navigate = useNavigate();
 	const[transactionHash, setTransactionHash] = useState("")
+	
 	
 
 	const networks = {

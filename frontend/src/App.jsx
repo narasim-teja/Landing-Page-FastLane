@@ -5,14 +5,16 @@ import './style.css';
 import Home from "./Home";
 import { Provider } from 'react-redux'
 import store from './store/store';
+import LandingPage from "./LandingPage";
 
 
 function App() {
     return (
         <Provider store={store}>
         <Routes>
-        
-          <Route path="/" element={<Home />} />
+
+        <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Home />} />
         
 
           <Route path="/play-me" element={<PlayMe />}
