@@ -10,4 +10,6 @@ npm install --force
 
 change the .envexample file to .env
 
-npm run dev 
+to run client: npm run dev 
+
+to run server: node src/spragu/app.js
