@@ -36,7 +36,7 @@ const LandingPage = () => {
   return (
     <>
     <h1 className="text-3xl md:text-6xl font-extrabold leading-snug mt-8 md:mt-0 text-custom-gray  ">
-      Welcome to Win-Me
+      Welcome to FastLane
         <br />
         
         
