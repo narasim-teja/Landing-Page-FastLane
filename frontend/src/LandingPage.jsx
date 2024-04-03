@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
@@ -6,7 +6,7 @@ import { motion } from "framer-motion-3d";
 import { useEffect, useRef, useState } from "react";
 
 import { useAnimations, useFBX,  } from '@react-three/drei'
-
+import Spinner from './Spinner.jsx';
 import { db } from './config/firestore'; // Adjust the import path as necessary
 import { collection, addDoc } from 'firebase/firestore';
 
@@ -135,11 +135,14 @@ const LandingPage = () => {
     // Container that fills the entire viewport and positions its children
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       {/* Canvas filling the container */}
-      <Canvas shadows camera={{ position: [0, 3, 10], fov: 42 }} style={{ width: '100%', height: '100%' }}>
-        <color attach="background" args={["#e6e7ff"]} />
-        <Scene/>
-        
-      </Canvas>
+      <Suspense fallback={<Spinner />}>
+        <Canvas shadows camera={{ position: [0, 3, 10], fov: 42 }} style={{ width: '100%', height: '100%' }}>
+          <color attach="background" args={["#e6e7ff"]} />
+          <Scene/>
+          
+        </Canvas>
+      </Suspense>
+     
 
       {/* Overlay content centered */}
       <div style={{
