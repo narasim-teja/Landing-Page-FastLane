@@ -13,7 +13,7 @@ function App() {
         <Provider store={store}>
         <Routes>
 
-        <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<Home />} />
         
 
