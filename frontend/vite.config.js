@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react'
+import envCompatible from 'vite-plugin-env-compatible'
 import { transformWithEsbuild } from 'vite'
 
 export default {
@@ -9,7 +10,7 @@ export default {
     [
         // React support
         react(),
-
+        envCompatible(),
         // .js file support as if it was JSX
         {
             name: 'load+transform-js-files-as-jsx',
@@ -36,4 +37,5 @@ export default {
         emptyOutDir: true, // Empty the folder first
         sourcemap: true // Add sourcemap
     },
+    envPrefix: 'REACT_APP_',
 }
