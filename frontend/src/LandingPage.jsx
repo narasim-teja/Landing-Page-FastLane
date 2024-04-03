@@ -1,10 +1,7 @@
 import React, { Suspense } from 'react'
-
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-
-import { motion } from "framer-motion-3d";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-
 import { useAnimations, useFBX,  } from '@react-three/drei'
 import Spinner from './Spinner.jsx';
 import { db } from './config/firestore'; // Adjust the import path as necessary
