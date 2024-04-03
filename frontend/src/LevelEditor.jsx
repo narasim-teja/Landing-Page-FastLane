@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux'
+
 import './LevelEditor.css';
 
 const obstacleOptions = [
@@ -14,16 +14,10 @@ const obstacleOptions = [
 const numberOfColumns = 5;
 
 export default function LevelEditor({ onObstaclesSelected }) {
-    const provider = useSelector(state => state.provider.connection)
-    const fastlane = useSelector(state => state.fastlane.contract)
-    const userAccount = useSelector(state => state.provider.account)
+    
   const [selections, setSelections] = useState(Array(4).fill({ obstacle: null, column: null }));
 
-  const mint = async () => {
-    const signer = provider.getSigner()
-    let transaction = await fastlane.connect(signer).mintSegment(userAccount)
-    await transaction.wait()
-}
+  
 
   const handleObstacleChange = (index, value) => {
     const newSelections = selections.map((sel, i) => 
