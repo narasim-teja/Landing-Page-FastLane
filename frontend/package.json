@@ -21,6 +21,7 @@
     "@react-three/fiber": "^8.15.8",
     "@react-three/postprocessing": "^2.15.8",
     "@react-three/rapier": "^1.1.2",
+    "@vercel/analytics": "^1.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "ethers": "^6.11.1",

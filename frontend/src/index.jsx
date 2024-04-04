@@ -3,6 +3,7 @@ import React, { Suspense } from 'react'; // Ensure React is imported when using 
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react"
 
 
 
@@ -16,6 +17,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+      <Analytics/>
     </BrowserRouter>
     
   </React.StrictMode>
