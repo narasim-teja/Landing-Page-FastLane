@@ -6,7 +6,37 @@ import { useAnimations, useFBX,  } from '@react-three/drei'
 import Spinner from './Spinner.jsx';
 import { db } from './config/firestore'; // Adjust the import path as necessary
 import { collection, addDoc } from 'firebase/firestore';
+import {
+  FiGithub,
+  FiTwitter,
+  FiLinkedin,
+  FiGlobe,
+  FiYoutube,
+  FiInstagram,
+} from "react-icons/fi";
 
+const socialLinks = [
+  {
+    id: 1,
+    icon: <FiTwitter />,
+    url: "https://twitter.com/fastlane_run",
+  },
+  // {
+  //   id: 2,
+  //   icon: <FiLinkedin />,
+  //   url: "https://www.linkedin.com/company/win-me1",
+  // },
+  // {
+  //   id: 3,
+  //   icon: <FiInstagram />,
+  //   url: "https://www.instagram.com/winme_1/",
+  // },
+  // {
+  //   id: 3,
+  //   icon: <FiYoutube />,
+  //   url: "https://www.youtube.com/@Win-Me",
+  // },
+];
 
 const Section = () => {
   const [email, setEmail] = useState('');
@@ -73,6 +103,24 @@ const Section = () => {
       ) : (
         <p className="text-xl md:text-3xl font-bold text-purple-400 mt-4">Thank you, we will keep you updated!</p> // Display thank you message
       )}
+
+        <div className="font-general-regular  flex-col justify-center items-center mb-12 mt-10 ">
+          <p className="text-2xl md:text-2xl text-primary-dark dark:text-primary-light mb-5 font-sans">
+            Follow Us
+          </p>
+          <ul className="flex gap-4 sm:gap-8">
+            {socialLinks.map((link) => (
+              <a
+                href={link.url}
+                target="__blank"
+                key={link.id}
+                className="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 cursor-pointer rounded-lg bg-gray-50 dark:bg-ternary-dark hover:bg-gray-100 shadow-sm p-4 duration-300"
+              >
+                <i className="text-xl sm:text-2xl md:text-3xl">{link.icon}</i>
+              </a>
+            ))}
+          </ul>
+        </div>
 
     </>
       
