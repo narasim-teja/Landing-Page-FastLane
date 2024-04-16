@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Float, Text, useFBX, useGLTF } from "@react-three/drei"
+import {  Environment, Float, Text, useFBX, useGLTF } from "@react-three/drei"
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import {useAnimations} from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -34,15 +34,13 @@ export function BlockStart({position=[0,0,0]}){
 
 export function WhaleObstacle({ position = [0, 0, 0] }) {
     const originalWhale = useFBX('/gold_coin_spork_1_raised.fbx');
-    // Clone the object for a unique instance
     const whale = useMemo(() => originalWhale.clone(), [originalWhale]);
     const { activateSpeedBoost } = useGame();
 
     const [isGameReady, setGameReady] = useState(false);
 
     useEffect(() => {
-        // Example condition to set the game as ready, could be based on player movement or a timer
-        const timer = setTimeout(() => setGameReady(true), 1000); // Wait for 1 second after load
+        const timer = setTimeout(() => setGameReady(true), 1000); // Ensure consistent timing
         return () => clearTimeout(timer);
     }, []);
 
@@ -53,27 +51,27 @@ export function WhaleObstacle({ position = [0, 0, 0] }) {
         }
     };
 
+    // Helper function to quantize values
+    const quantize = (value) => Math.round(value * 1000) / 1000;
+
+    // Apply quantization to position and scale
+    const quantizedPosition = position.map(quantize);
+    const quantizedScale = quantize(0.007);
+
     return (
-        <group position={position}>
-            {/* <mesh receiveShadow position={[0, -0.1, 0]}>
-                <boxGeometry args={[5, 0.2, 5]} />
-                <meshStandardMaterial color="greenyellow" />
-            </mesh> */}
+        <group position={quantizedPosition}>
             <RigidBody 
                 colliders="hull" 
                 restitution={0.2} 
                 friction={1}
                 onCollisionExit={handleCollisionExit}
-                
-
             > 
-                    <primitive object={whale} scale={0.007} position={[-2.9,0,0]} />   
+                <primitive object={whale} scale={quantizedScale} position={[-2.9, 0, 0].map(quantize)} />
             </RigidBody>
-            
-            
         </group>
     );
 }
+
 
 
 
@@ -109,51 +107,6 @@ export function TextObstacle({position=[0,0,0]}){
      
 }
 
-// export function SpawnObs({col,row,obstacleId}){
-       
-//         const position = useMemo(() => [col , 0.5, -row * 5], [col, row]);
-        
-//         const originalPoop = useFBX('/poop_final.fbx')
-        
-    
-//         const poop = useMemo(() => originalPoop.clone(), [originalPoop])
-    
-//         const { activateSpeedReduction } = useGame();
-    
-//         const [isGameReady, setGameReady] = useState(false);
-    
-//         useEffect(() => {
-//             // Example condition to set the game as ready, could be based on player movement or a timer
-//             const timer = setTimeout(() => setGameReady(true), 1000); // Wait for 1 second after load
-//             return () => clearTimeout(timer);
-//         }, []);
-    
-//         const handleCollisionExit = () => {
-//             if (isGameReady) {
-//                 console.log("activating speed reduction.");
-//                 activateSpeedReduction();
-//             }
-//         };
-      
-//         return<group position={position} >
-//             {/* <mesh receiveShadow position={[0,-0.1,0]} >
-//                 <boxGeometry args={[5,0.2,5]} />
-//                 <meshStandardMaterial color="greenyellow" />
-//             </mesh> */}
-    
-//             <RigidBody 
-//                 colliders="hull" 
-//                 restitution={0.2} 
-//                 friction={1} 
-//                 onCollisionExit={handleCollisionExit}  
-//             >
-//                 <primitive object={poop} scale={0.004} position={[0,0,0]} rotation-x={-Math.PI/2} />
-//             </RigidBody>
-            
-         
-//      </group>
-         
-// }
 
 export function ObstacleSpawner  ({ row, col, obstacleId })  {
     const ObstacleComponent = useObstacleComponentById(obstacleId);
@@ -190,11 +143,6 @@ export function PoopObstacle({position=[0,0,0]}){
     };
   
     return<group position={position} >
-        {/* <mesh receiveShadow position={[0,-0.1,0]} >
-            <boxGeometry args={[5,0.2,5]} />
-            <meshStandardMaterial color="greenyellow" />
-        </mesh> */}
-
         <RigidBody 
             colliders="hull" 
             restitution={0.2} 
@@ -230,43 +178,11 @@ export function GreenCandle_1({position=[0,0,0]}){
     });
   
     return<group position={position} >
-        {/* <mesh receiveShadow position={[0,-0.1,0]} >
-            <boxGeometry args={[5,0.2,5]} />
-            <meshStandardMaterial color="greenyellow" />
-        </mesh> */}
         <RigidBody ref={ obstacleRef } type="kinematicPosition" restitution={ 0.2 } friction={ 1 }> 
-
             <primitive object={green_1} scale={0.005} position={[2.1,0.2,0]} rotation-z={Math.PI/2}  />
-        </RigidBody>
-        
-    </group>
-     
+        </RigidBody>  
+    </group>  
 }
-
-// export function CrystalObstacle_1({ position = [0, 0, 0] }) {
-//     const originalCrystal = useFBX('/crystals_part1.fbx');
-    
-//     // Clone the object for a unique instance
-//     const crystal = useMemo(() => originalCrystal.clone(), [originalCrystal]);
-//     console.log(crystal)
-    
-//     return (
-//         <group position={position}>
-//             {/* <mesh receiveShadow position={[0, -0.1, 0]}>
-//                 <boxGeometry args={[5, 0.2, 5]} />
-//                 <meshStandardMaterial color="greenyellow" />
-//             </mesh> */}
-//             <RigidBody 
-//                 colliders="trimesh" 
-//                 restitution={0.2} 
-//                 friction={1}
-//             > 
-//                     <primitive object={crystal} scale={0.003} position={[0,0,0]} />   
-//             </RigidBody>
-            
-//         </group>
-//     );
-// }
 
 export function BlockEnd({position=[0,0,0]}){
     return<group position={position} >
@@ -283,118 +199,64 @@ export function BlockEnd({position=[0,0,0]}){
             <meshStandardMaterial color="limegreen" />
         </mesh>
 
-        {/*Contuie button*/}
-
-        {/* <mesh position={[2,2,-1]} rotation-x={Math.PI/2}
-            
-         >
-           
-            <boxGeometry args={[1.2,0.1,0.47]}  />
-            <meshStandardMaterial color="green" />
-        </mesh>
-        <mesh position={[2,2,-1]} rotation-x={Math.PI/2}>
-            <Text
-                font="/bebas-neue-v9-latin-regular.woff"
-                scale={ 0.19 }
-                maxWidth={ 6 }
-                lineHeight={ 0.75 }
-                rotation-x={-Math.PI/2}
-                position={[0.04,0.06,0]}
-                
-            >
-                Click to Continue to the next segment!
-                <meshBasicMaterial toneMapped={ false } />
-            </Text>
-        </mesh> */}
-
-        {/*New segment road */}
-
-        {/* <mesh position={[2,1,-1]} rotation-x={Math.PI/2}
-            onClick={() => console.log("hee")}
-         >
-           
-            <boxGeometry args={[1.2,0.1,0.47]}  />
-            <meshStandardMaterial color="green" />
-        </mesh> */}
-        {/* <mesh position={[2,1,-1]} rotation-x={Math.PI/2}>
-            <Text
-                font="/bebas-neue-v9-latin-regular.woff"
-                scale={ 0.19 }
-                maxWidth={ 6 }
-                lineHeight={ 0.75 }
-                rotation-x={-Math.PI/2}
-                position={[0.04,0.06,0]}
-                
-            >
-                Click to build the segment!
-                <meshBasicMaterial toneMapped={ false } />
-            </Text>
-        </mesh> */}
-
     </group>
      
 }
 
 function Bounds({length=5, onClick}) {
-
-    
-    const originalCorridor = useFBX('/cooridor.fbx');
-
-    const corridor = useMemo(() => originalCorridor.clone(), [originalCorridor])
-
+    const originalCorridor = useFBX('/Road_Plane.fbx');
+    const corridor = useMemo(() => originalCorridor.clone(), [originalCorridor]);
     const { activatePause } = useGame();
 
     const handleCheckpointEnter = () => {
-        activatePause()
-        
-         onClick()
-        
-        
-        
+        activatePause();
+        onClick();
     }
 
+    // Quantizing scale and position values to 3 decimal places
+    const quantize = (value) => Math.round(value * 1000) / 1000;
+    const scale = [quantize(0.014), quantize(0.01), quantize(0.00668 * length)];
+    const position = [quantize(2), quantize(-0.21), quantize(-(2 * length) -3)];
 
     return <>
+        <RigidBody type="fixed" colliders="trimesh" restitution={0.2} friction={1}>
         
-        <RigidBody type="fixed" colliders="trimesh" restitution={ 0.2 } friction={ 1 }  >
-            
-        <primitive object={corridor} scale={[0.014,0.01, (0.00668 * length)]} position={[2,-0.21,-(2 * length) -3]}  />
-        <CuboidCollider
+            <primitive object={corridor} scale={scale} position={position} />
+            <CuboidCollider
                 type="fixed"
-                args={ [ 2.5, 0, 2.5 ] }
-                position={ [ 2, 0, - (5 * length) -3 ] }
-                restitution={ 0.2}
-                friction={ 1 }
+                args={[2.5, 0, 2.5]}
+                position={[2, 0, - (5 * length) -3]}
+                restitution={0.2}
+                friction={1}
                 onCollisionEnter={handleCheckpointEnter}
             />
-            
         </RigidBody>
     </>
-    
 }
 
 
 
 
-export  function Level({obstaclesArray, onAddSegment, position }) {
+
+export function Level({obstaclesArray, onAddSegment, position}) {
     const obstacles = obstaclesArray.obstacles || [];
-    // console.log(obstacles)
+    // Quantize position
+    const quantize = (value) => Math.round(value * 1000) / 1000;
+    const quantizedPosition = position.map(quantize);
 
     return(
-        <group position={position}>
-        
+        <group position={quantizedPosition}>
             {obstacles.map((obstacleId, index) => {
                 if (obstacleId === 0) return null; // Skip if no obstacle
                 const row = Math.floor(index / 5);
                 const col = index % 5;
+                // Pass quantized position to ObstacleSpawner
                 return <ObstacleSpawner key={index} row={row} col={col} obstacleId={obstacleId.toString()} />;
             })}
-          <BlockStart position={[0, 0, 0]} />
-          <BlockEnd position={[0, 0, -((4 + 1) * 5)]}  />
-          <Bounds length={4 + 1} onClick={onAddSegment} />
-          
+            <BlockStart position={[0, 0, 0]} />
+            <BlockEnd position={[0, 0, -((4 + 1) * 5)]}  />
+            <Bounds length={4 + 1} onClick={onAddSegment} />
+            <Environment preset='dawn' background/>
         </group>
-      );
-    
-
-} 
+    );
+}
