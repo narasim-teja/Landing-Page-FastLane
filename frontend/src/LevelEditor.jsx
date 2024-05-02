@@ -14,7 +14,7 @@ const obstacleOptions = [
 // Assuming a fixed number of columns (5 for this example)
 const numberOfColumns = 5;
 
-const contractAddress = import.meta.env.REACT_APP_OASISCONTRACT_ADDR // Replace with your contract's address
+const contractAddress = import.meta.env.REACT_APP_OASISCONTRACT_ADDR || '0x28523fd02291B97B93B2DB83b25C4295445fE0a1' // Replace with your contract's address
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contract = new ethers.Contract(contractAddress, abi, signer);
