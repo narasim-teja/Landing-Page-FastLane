@@ -22,10 +22,13 @@ import { useObstacleComponentById } from './useObstacleComponentById';
 export function BlockStart({position=[0,0,0]}){
     
     return<group position={position} >
-        {/* <mesh receiveShadow position={[0,-0.1,0]} >
-            <boxGeometry args={[5,0.2,5]} />
-            <meshStandardMaterial color="limegreen" />
-        </mesh> */}
+        <RigidBody type="fixed" colliders="trimesh" restitution={0.2} friction={1}>
+            <mesh receiveShadow position={[0,-0.1,0]} >
+                <boxGeometry args={[5,0.2,5]} />
+                <meshStandardMaterial color="limegreen" />
+            </mesh>
+        </RigidBody>
+        
         
     </group>
      
@@ -66,7 +69,7 @@ export function WhaleObstacle({ position = [0, 0, 0] }) {
                 friction={1}
                 onCollisionExit={handleCollisionExit}
             > 
-                <primitive object={whale} scale={quantizedScale} position={[-2.9, 0, 0].map(quantize)} />
+                <primitive object={whale} scale={quantizedScale} position={[-2, 0, 0].map(quantize)} />
             </RigidBody>
         </group>
     );
@@ -149,7 +152,7 @@ export function PoopObstacle({position=[0,0,0]}){
             friction={1} 
             onCollisionExit={handleCollisionExit}  
         >
-            <primitive object={poop} scale={0.007} position={[1,0.8,1.6]} rotation-x={-Math.PI/2} />
+            <primitive object={poop} scale={0.007} position={[0,0.8,1.6]} rotation-x={-Math.PI/2} />
         </RigidBody>
         
      
@@ -189,12 +192,12 @@ export function BlockEnd({position=[0,0,0]}){
         <Text
             font="/bebas-neue-v9-latin-regular.woff"
             scale={ 1 }
-            position={ [ 0, 1.25, -1 ] }
+            position={ [ 0, 1.25, 2 ] }
         >
             Checkpoint
             <meshBasicMaterial toneMapped={ false } />
         </Text>
-        <mesh receiveShadow position={[2,0,-3]} >
+        <mesh receiveShadow position={[2,0,2]} >
             <boxGeometry args={[5,0.1,5]} />
             <meshStandardMaterial color="limegreen" />
         </mesh>
@@ -216,7 +219,7 @@ function Bounds({length=5, onClick}) {
     // Quantizing scale and position values to 3 decimal places
     const quantize = (value) => Math.round(value * 1000) / 1000;
     const scale = [quantize(0.014), quantize(0.01), quantize(0.00668 * length)];
-    const position = [quantize(2), quantize(-0.21), quantize(-(2 * length) -3)];
+    const position = [quantize(2), quantize(-0.21), quantize(-(2 * length) -0.6)];
 
     return <>
         <RigidBody type="fixed" colliders="trimesh" restitution={0.2} friction={1}>
@@ -225,7 +228,7 @@ function Bounds({length=5, onClick}) {
             <CuboidCollider
                 type="fixed"
                 args={[2.5, 0, 2.5]}
-                position={[2, 0, - (5 * length) -3]}
+                position={[2, 0, - (5 * length) +2]}
                 restitution={0.2}
                 friction={1}
                 onCollisionEnter={handleCheckpointEnter}
@@ -238,8 +241,11 @@ function Bounds({length=5, onClick}) {
 
 
 
-export function Level({obstaclesArray, onAddSegment, position}) {
+export function Level({obstaclesArray, onAddSegment, position,}) {
     const obstacles = obstaclesArray.obstacles || [];
+
+    
+
     // Quantize position
     const quantize = (value) => Math.round(value * 1000) / 1000;
     const quantizedPosition = position.map(quantize);
@@ -253,9 +259,9 @@ export function Level({obstaclesArray, onAddSegment, position}) {
                 // Pass quantized position to ObstacleSpawner
                 return <ObstacleSpawner key={index} row={row} col={col} obstacleId={obstacleId.toString()} />;
             })}
-            <BlockStart position={[0, 0, 0]} />
-            <BlockEnd position={[0, 0, -((4 + 1) * 5)]}  />
-            <Bounds length={4 + 1} onClick={onAddSegment} />
+            <BlockStart position={[2, 0.1, 7]} />
+            <BlockEnd position={[0, 0, -((9 + 1) * 5)]}  />
+            <Bounds length={9 + 1} onClick={onAddSegment} />
             <Environment preset='dawn' background/>
         </group>
     );

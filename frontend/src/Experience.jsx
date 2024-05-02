@@ -34,7 +34,7 @@ export default function Experience() {
                                onAddSegment={index === segments.length - 1 ? openEditor : undefined}
                                position={[0, 0, -(index * 30)]}
                                onCollisionExit={handleCollisionExit}
-                               
+                              
                                />
                     ))}
                 

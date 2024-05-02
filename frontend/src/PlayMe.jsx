@@ -46,6 +46,7 @@ function PlayMe() {
               position: [0, 4, 23] //0,4,23
               }}
           >
+            
               <Experience />
           </Canvas>
           </Suspense>
