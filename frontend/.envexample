@@ -1,2 +1,3 @@
 TEST_TRACK_OWNER_PKEY = deploying Address Private Key
-OASIS_CONTRACT_ADDR = contract address
+OASIS_CONTRACT_ADDR = deployed contract address
+REACT_APP_OASISCONTRACT_ADDR = same as OASIS_CONTRACT_ADDR

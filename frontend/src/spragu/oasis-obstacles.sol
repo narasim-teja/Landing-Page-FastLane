@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// // SPDX-License-Identifier: MIT
 // pragma solidity ^0.8.0;
 
 // contract OasisObstacle {
@@ -13,24 +13,53 @@
 //     }
 
 //     constructor() {
-//     owners[msg.sender] = true;
-    
-//     // Dummy row - assuming '0' signifies a non-obstacle or an empty space.
-//     uint256[] memory dummyObstacles = new uint256[](5);
-//     for(uint i = 0; i < COLUMNS; i++) {
-//         dummyObstacles[i] = 0; // Initialize all to '0' or another placeholder value.
-//     }
-//     addRow(23295, dummyObstacles);
+//         owners[msg.sender] = true;
+        
+//         // Initial obstacles now effectively at rowIndex 0.
+//         uint256[] memory StartObstacles = new uint256[](5);
+//         StartObstacles[0] = 0;
+//         StartObstacles[1] = 0;
+//         StartObstacles[2] = 3;
+//         StartObstacles[3] = 0;
+//         StartObstacles[4] = 0;
+//         addRow(23295, StartObstacles);
 
-//     // Initial obstacles now effectively at rowIndex 1.
-//     uint256[] memory initialObstacles = new uint256[](5);
-//     initialObstacles[0] = 0;
-//     initialObstacles[1] = 1;
-//     initialObstacles[2] = 2;
-//     initialObstacles[3] = 3;
-//     initialObstacles[4] = 4;
-//     addRow(23295, initialObstacles);
-// }
+//         // Initial obstacles now effectively at rowIndex 1.
+//         uint256[] memory initialObstacles = new uint256[](5);
+//         initialObstacles[0] = 0;
+//         initialObstacles[1] = 0;
+//         initialObstacles[2] = 2;
+//         initialObstacles[3] = 0;
+//         initialObstacles[4] = 0;
+//         addRow(23295, initialObstacles);
+
+//         // Adding predefined obstacles for rowIndex 2.
+//         uint256[] memory secondRowObstacles = new uint256[](5);
+//         secondRowObstacles[0] = 0;
+//         secondRowObstacles[1] = 0;
+//         secondRowObstacles[2] = 0;
+//         secondRowObstacles[3] = 1;
+//         secondRowObstacles[4] = 0;
+//         addRow(23295, secondRowObstacles);
+
+//         // Adding predefined obstacles for rowIndex 3.
+//         uint256[] memory thirdRowObstacles = new uint256[](5);
+//         thirdRowObstacles[0] = 0;
+//         thirdRowObstacles[1] = 4;
+//         thirdRowObstacles[2] = 0;
+//         thirdRowObstacles[3] = 0;
+//         thirdRowObstacles[4] = 0;
+//         addRow(23295, thirdRowObstacles);
+
+//         // Adding predefined obstacles for rowIndex 4.
+//         uint256[] memory fourthRowObstacles = new uint256[](5);
+//         fourthRowObstacles[0] = 0;
+//         fourthRowObstacles[1] = 0;
+//         fourthRowObstacles[2] = 0;
+//         fourthRowObstacles[3] = 0;
+//         fourthRowObstacles[4] = 4;
+//         addRow(23295, fourthRowObstacles);
+//     }
 
 
 //     function addSegment(uint256 chainId, uint256[] memory obstacleIds) public {
@@ -46,12 +75,14 @@
 //             row1[i] = obstacleIds[i + 5];
 //             row2[i] = obstacleIds[i + 10];
 //             row3[i] = obstacleIds[i + 15];
+            
 //         }
 
 //         addRow(chainId, row0);
 //         addRow(chainId, row1);
 //         addRow(chainId, row2);
 //         addRow(chainId, row3);
+       
 //     }
 
 
@@ -83,7 +114,7 @@
 //         owners[ownerToRemove] = false;
 //     }
 
-//     function getObstaclesInRow(uint256 chainId, uint256 rowIndex) public view  returns (uint256[] memory) {
+//     function getObstaclesInRow(uint256 chainId, uint256 rowIndex) public view onlyOwner  returns (uint256[] memory) {
 //     require(rowIndex < getRowCount(chainId) * COLUMNS, "Row index out of bounds");
 
 //     uint256[] memory obstaclesInRow = new uint256[](COLUMNS);

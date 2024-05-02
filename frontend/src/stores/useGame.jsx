@@ -3,10 +3,10 @@ import { subscribeWithSelector } from 'zustand/middleware'
 
 import { io } from 'socket.io-client';
 
-// Connect to the WebSocket server
-// const socket = io.connect("http://localhost:3000");
+// ss
+const socket = io.connect("http://localhost:3000");
 
-// console.log(socket)
+console.log(socket)
 
   
 
@@ -26,6 +26,8 @@ const initialObstaclesData = [
 const useGame = create(subscribeWithSelector((set, get) => ({
     segments: [{ obstacles: initialObstaclesData.slice(0,4) }],
     editorOpen: false,
+
+    
 
     
 
@@ -138,22 +140,22 @@ const useGame = create(subscribeWithSelector((set, get) => ({
 })));
 
 // WebSocket event listeners
-// socket.on("connect", () => {
-//     console.log("WebSocket connected");
-//     // Example emit, adjust according to your actual initial data fetch needs
+socket.on("connect", () => {
+    console.log("WebSocket connected");
+    // Example emit, adjust according to your actual initial data fetch needs
 
-// });
+});
 
 
-// socket.on("client.revealRow", (rowId, obstaclesInRow) => {
-//     console.log(`Raw event data for row ${rowId}:`, obstaclesInRow);
-//     if (obstaclesInRow) {
-//         console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
-//         useGame.getState().appendObstaclesRow(obstaclesInRow);
-//     } else {
-//         console.error(`No obstacles data received for row ${rowId} ,Data: ${JSON.stringify(obstaclesInRow)}.`);
-//         // Handle the case where no data is received (e.g., request data again or use fallback data)
-//     }
-// });
+socket.on("client.revealRow", (rowId, obstaclesInRow) => {
+    console.log(`Raw event data for row ${rowId}:`, obstaclesInRow);
+    if (obstaclesInRow) {
+        console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
+        useGame.getState().appendObstaclesRow(obstaclesInRow);
+    } else {
+        console.error(`No obstacles data received for row ${rowId} ,Data: ${JSON.stringify(obstaclesInRow)}.`);
+        // Handle the case where no data is received (e.g., request data again or use fallback data)
+    }
+});
 
 export default useGame;

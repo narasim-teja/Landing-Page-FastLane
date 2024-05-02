@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { ethers } from 'ethers';
 import './LevelEditor.css';
+import abi from './constants/spraguAbi.json' 
 
 const obstacleOptions = [
   { label: "None", value: null, image: "/StoreImages/none.png" },
@@ -12,6 +13,11 @@ const obstacleOptions = [
 
 // Assuming a fixed number of columns (5 for this example)
 const numberOfColumns = 5;
+
+const contractAddress = import.meta.env.REACT_APP_OASISCONTRACT_ADDR // Replace with your contract's address
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+const contract = new ethers.Contract(contractAddress, abi, signer);
 
 export default function LevelEditor({ onObstaclesSelected }) {
     
@@ -41,8 +47,15 @@ export default function LevelEditor({ onObstaclesSelected }) {
         resultArray[sel.column + (index * numberOfColumns)] = parseInt(sel.obstacle);
       }
     });
-    // await mint()
-    onObstaclesSelected(resultArray);
+    try {
+      // Assuming `addSegment` takes chainId and the obstacles array as arguments
+      const chainId = 23295; // Adjust this as necessary
+      await contract.addSegment(chainId, resultArray);
+      onObstaclesSelected(resultArray);
+    } catch (error) {
+      console.error('Error submitting obstacles to the blockchain:', error);
+    }
+  
     
    
   };
