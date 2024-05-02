@@ -4,9 +4,9 @@ import { subscribeWithSelector } from 'zustand/middleware'
 import { io } from 'socket.io-client';
 
 // ss
-const socket = io.connect("http://localhost:3000");
+// const socket = io.connect("http://localhost:3000");
 
-console.log(socket)
+// console.log(socket)
 
   
 
@@ -46,10 +46,10 @@ const useGame = create(subscribeWithSelector((set, get) => ({
             editorOpen: false,
         }));
 
-        // Then, use the get function to access the updated state and emit the socket event
-        const { segments } = get();
-        const currentSegment = segments[segments.length - 1]; // Get the latest segment
-        socket.emit("server.addSegment",59140, currentSegment.obstacles);
+        // // Then, use the get function to access the updated state and emit the socket event
+        // const { segments } = get();
+        // const currentSegment = segments[segments.length - 1]; // Get the latest segment
+        // socket.emit("server.addSegment",59140, currentSegment.obstacles);
     },
 
     openEditor: () => set(() => ({ editorOpen: true })),
@@ -139,23 +139,23 @@ const useGame = create(subscribeWithSelector((set, get) => ({
 
 })));
 
-// WebSocket event listeners
-socket.on("connect", () => {
-    console.log("WebSocket connected");
-    // Example emit, adjust according to your actual initial data fetch needs
+// // WebSocket event listeners
+// socket.on("connect", () => {
+//     console.log("WebSocket connected");
+//     // Example emit, adjust according to your actual initial data fetch needs
 
-});
+// });
 
 
-socket.on("client.revealRow", (rowId, obstaclesInRow) => {
-    console.log(`Raw event data for row ${rowId}:`, obstaclesInRow);
-    if (obstaclesInRow) {
-        console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
-        useGame.getState().appendObstaclesRow(obstaclesInRow);
-    } else {
-        console.error(`No obstacles data received for row ${rowId} ,Data: ${JSON.stringify(obstaclesInRow)}.`);
-        // Handle the case where no data is received (e.g., request data again or use fallback data)
-    }
-});
+// socket.on("client.revealRow", (rowId, obstaclesInRow) => {
+//     console.log(`Raw event data for row ${rowId}:`, obstaclesInRow);
+//     if (obstaclesInRow) {
+//         console.log(`Reveal data for row: ${rowId}, Data: ${JSON.stringify(obstaclesInRow)}`);
+//         useGame.getState().appendObstaclesRow(obstaclesInRow);
+//     } else {
+//         console.error(`No obstacles data received for row ${rowId} ,Data: ${JSON.stringify(obstaclesInRow)}.`);
+//         // Handle the case where no data is received (e.g., request data again or use fallback data)
+//     }
+// });
 
 export default useGame;
