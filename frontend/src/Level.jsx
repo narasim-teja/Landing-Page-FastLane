@@ -206,7 +206,7 @@ export function BlockEnd({position=[0,0,0]}){
      
 }
 
-function Bounds({length=5, onClick}) {
+function Bounds({length=9, onClick}) {
     const originalCorridor = useFBX('/Road_Plane.fbx');
     const corridor = useMemo(() => originalCorridor.clone(), [originalCorridor]);
     const { activatePause } = useGame();
@@ -219,7 +219,7 @@ function Bounds({length=5, onClick}) {
     // Quantizing scale and position values to 3 decimal places
     const quantize = (value) => Math.round(value * 1000) / 1000;
     const scale = [quantize(0.014), quantize(0.01), quantize(0.00668 * length)];
-    const position = [quantize(2), quantize(-0.21), quantize(-(2 * length) -0.6)];
+    const position = [quantize(2), quantize(-0.21), quantize(-(2 * length) +0.05)];
 
     return <>
         <RigidBody type="fixed" colliders="trimesh" restitution={0.2} friction={1}>
@@ -260,9 +260,10 @@ export function Level({obstaclesArray, onAddSegment, position,}) {
                 return <ObstacleSpawner key={index} row={row} col={col} obstacleId={obstacleId.toString()} />;
             })}
             <BlockStart position={[2, 0.1, 7]} />
-            <BlockEnd position={[0, 0, -((9 + 1) * 5)]}  />
-            <Bounds length={9 + 1} onClick={onAddSegment} />
+            <BlockEnd position={[0, 0, -((8 + 1) * 4.99)]}  />
+            <Bounds length={8 + 1} onClick={onAddSegment} />
             <Environment preset='dawn' background/>
         </group>
     );
 }
+

@@ -230,7 +230,7 @@ export default function Player()
        
         const zPosition = body.current.translation().z;
 
-        const currentRow = Math.floor(-zPosition/4.5);
+        const currentRow = Math.floor(-zPosition/4.5); //when to reveal the obstacle
         // console.log(currentRow) // Assuming each unit in Z represents a row
 
         // Check if the player has moved to a new row

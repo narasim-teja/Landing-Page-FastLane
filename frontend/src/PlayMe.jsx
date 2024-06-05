@@ -25,7 +25,11 @@ import { io } from 'socket.io-client';
 
 // Define a functional component to encapsulate Zustand state usage and conditional rendering
 function PlayMe() {
-    const { editorOpen, addSegment } = useGame(); // Use Zustand hook inside the component
+    const { editorOpen, addSegment, segments } = useGame(); // Use Zustand hook inside the component
+
+    // Calculate if the LevelEditor should be shown
+    const shouldShowEditor = editorOpen && segments[segments.length - 1].obstacles.length <= 10;
+
   
     return (
       <KeyboardControls
@@ -52,7 +56,7 @@ function PlayMe() {
           </Suspense>
           
         {/* Conditionally render LevelEditor based on editorOpen state */}
-        {editorOpen && <LevelEditor onObstaclesSelected={(selectedObstacles) => addSegment(selectedObstacles)}  />}
+        {shouldShowEditor && <LevelEditor onObstaclesSelected={(selectedObstacles) => addSegment(selectedObstacles)}  />}
       </KeyboardControls>
     );
   }

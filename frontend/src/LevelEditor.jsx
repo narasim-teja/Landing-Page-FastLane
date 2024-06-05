@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import './LevelEditor.css';
-import abi from './constants/spraguAbi.json' 
+import abi from './constants/spraguAbi.json';
 
 const obstacleOptions = [
   { label: "None", value: null, image: "/StoreImages/none.png" },
@@ -11,19 +11,16 @@ const obstacleOptions = [
   { label: "Green Candle", value: "4", image: "/StoreImages/candle_obstacle.webp" },
 ];
 
-// Assuming a fixed number of columns (5 for this example)
 const numberOfColumns = 5;
+const numberOfRows = 8;  // Adjusted number of rows
 
-const contractAddress = import.meta.env.REACT_APP_OASISCONTRACT_ADDR || '0x28523fd02291B97B93B2DB83b25C4295445fE0a1' // Replace with your contract's address
+const contractAddress = import.meta.env.REACT_APP_OASISCONTRACT_ADDR || '0x8e5b50E5376f246F35880D934A17d8A349bE312a';
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contract = new ethers.Contract(contractAddress, abi, signer);
 
 export default function LevelEditor({ onObstaclesSelected }) {
-    
-  const [selections, setSelections] = useState(Array(4).fill({ obstacle: null, column: null }));
-
-  
+  const [selections, setSelections] = useState(Array(numberOfRows).fill({ obstacle: null, column: null }));
 
   const handleObstacleChange = (index, value) => {
     const newSelections = selections.map((sel, i) => 
@@ -41,35 +38,33 @@ export default function LevelEditor({ onObstaclesSelected }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const resultArray = Array(numberOfColumns * 4).fill(0);
+    const resultArray = Array(numberOfColumns * numberOfRows).fill(0);
     selections.forEach((sel, index) => {
       if (sel.obstacle !== null && sel.column !== null) {
         resultArray[sel.column + (index * numberOfColumns)] = parseInt(sel.obstacle);
       }
     });
+
+    // Append 10 zeros to the resultArray
+    const extendedResultArray = resultArray.concat(Array(10).fill(0));
+
     try {
-      // Assuming `addSegment` takes chainId and the obstacles array as arguments
-      const chainId = 23295; // Adjust this as necessary
-      await contract.addSegment(chainId, resultArray);
-      onObstaclesSelected(resultArray);
+      const chainId = 23295;
+      await contract.addSegment(chainId, extendedResultArray);
+      onObstaclesSelected(extendedResultArray);
     } catch (error) {
       console.error('Error submitting obstacles to the blockchain:', error);
     }
-  
-    
-   
   };
 
   return (
     <div className="level-editor">
       <form onSubmit={handleSubmit}>
-        <p className="editor-instruction">
-            Select the obstacles in order for the next segment:
-        </p>
-        {Array.from({ length: 4 }).map((_, index) => (
+        <p className="editor-instruction">Select the obstacles in order for the next segment:</p>
+        {Array.from({ length: numberOfRows }).map((_, index) => (
           <div key={index} className="obstacle-selection">
             <div className="obstacle-label">Obstacle {index + 1}:</div>
-            {obstacleOptions.map((option, optIndex) => (
+            {obstacleOptions.map((option) => (
               <label key={option.value} className="obstacle-option">
                 <input
                   type="radio"
